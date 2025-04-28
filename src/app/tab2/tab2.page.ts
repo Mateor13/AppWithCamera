@@ -13,4 +13,7 @@ constructor( public photoService: PhotoService) {}
   addPhotoToGallery() {
     this.photoService.addNewToGallery();
   }
+  async ngOnInit() {
+    await this.photoService.loadSaved();
+  }
 }
