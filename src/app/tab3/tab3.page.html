@@ -1,17 +1,20 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Tab 3
+      Galería de fotos
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 3</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <app-explore-container name="Tab 3 page"></app-explore-container>
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let photo of photoService.photos; let i = index" lines="none">
+      <div class="photo-container">
+        <ion-thumbnail>
+          <img [src]="photo.webviewPath" alt="Photo" />
+        </ion-thumbnail>
+        <p class="photo-name">{{ photo.name }}</p>
+      </div>
+    </ion-item>
+  </ion-list>
 </ion-content>
