@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { PhotoService } from '../services/photo.service';
+import { NavController, AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-tab2',
@@ -7,13 +8,46 @@ import { PhotoService } from '../services/photo.service';
   styleUrls: ['tab2.page.scss'],
   standalone: false,
 })
-export class Tab2Page {
+export class Tab2Page implements OnInit, OnDestroy {
 
-constructor( public photoService: PhotoService) {}
-  addPhotoToGallery() {
-    this.photoService.addNewToGallery();
+  constructor(
+    public photoService: PhotoService,
+    private navCtrl: NavController,
+    private alertCtrl: AlertController,
+  ) { }
+
+  ngOnInit() { }
+
+  async addPhotoToGallery(tab: string) {
+    await this.photoService.addNewToGallery(tab);
+    this.navCtrl.navigateForward(`/tabs/${tab}`);
   }
-  async ngOnInit() {
-    await this.photoService.loadSaved();
+
+  async showTabSelection() {
+    const alert = await this.alertCtrl.create({
+      header: 'Save Photo To Tab',
+      buttons: [
+        {
+          text: 'Tab 1',
+          handler: () => {
+            this.addPhotoToGallery('tab1');
+          },
+        },
+        {
+          text: 'Tab 3',
+          handler: () => {
+            this.addPhotoToGallery('tab3');
+          },
+        },
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        }
+      ],
+    });
+    await alert.present();
+  }
+
+  ngOnDestroy() {
   }
 }

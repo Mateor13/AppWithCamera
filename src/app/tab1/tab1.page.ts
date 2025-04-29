@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { PhotoService } from '../services/photo.service';
 
 @Component({
   selector: 'app-tab1',
@@ -6,8 +7,20 @@ import { Component } from '@angular/core';
   styleUrls: ['tab1.page.scss'],
   standalone: false,
 })
-export class Tab1Page {
+export class Tab1Page implements OnInit, OnDestroy {
 
-  constructor() {}
+  constructor(public photoService: PhotoService) { }
 
+  ngOnInit() {
+      this.photoService.loadSaved();
+  }
+
+  ionViewDidEnter() {
+    if (!this.photoService.loaded) {
+      this.photoService.loadSaved();
+    }
+  }
+
+  ngOnDestroy() {
+  }
 }
