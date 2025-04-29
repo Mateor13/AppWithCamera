@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { PhotoService } from '../services/photo.service';
+import { AlertController } from '@ionic/angular'; 
 
 @Component({
   selector: 'app-tab2',
@@ -8,11 +9,44 @@ import { PhotoService } from '../services/photo.service';
   standalone: false,
 })
 export class Tab2Page {
+  constructor(
+    public photoService: PhotoService,
+    private alertController: AlertController 
+  ) {}
 
-constructor( public photoService: PhotoService) {}
+  async showResolutionOptions() {
+    const alert = await this.alertController.create({
+      header: 'Select Resolution',
+      message: 'Choose the resolution for the photo.',
+      buttons: [
+        {
+          text: 'Full Resolution',
+          handler: () => {
+            this.photoService.setPhotoQuality(100);
+            this.addPhotoToGallery();
+          },
+        },
+        {
+          text: '50% Resolution',
+          handler: () => {
+            this.photoService.setPhotoQuality(50);
+            this.addPhotoToGallery();
+          },
+        },
+      ],
+    });
+    await alert.present();
+  }
+
+  takePhotoAtHalfResolution() {
+    this.photoService.setPhotoQuality(50); 
+    this.addPhotoToGallery();
+  }
+
   addPhotoToGallery() {
     this.photoService.addNewToGallery();
   }
+
   async ngOnInit() {
     await this.photoService.loadSaved();
   }
